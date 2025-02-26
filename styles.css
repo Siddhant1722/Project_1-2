@@ -1,0 +1,337 @@
+/* Base styles and reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Header styles */
+header {
+    background-color: #4682B4;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Controls container */
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background-color: white;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.control-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+select, button {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: white;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4682B4;
+}
+
+button {
+    cursor: pointer;
+    background-color: #4682B4;
+    color: white;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #3A6A8E;
+}
+
+/* Stats container */
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.stat-card {
+    flex: 1;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4682B4;
+    margin-bottom: 0.5rem;
+}
+
+.stat-description {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+/* Dashboard container */
+.dashboard-container {
+    margin: 1rem;
+}
+
+.dashboard-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card {
+    flex: 1;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-card h2 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Visualization containers */
+#scatter-plot, #choropleth-map, #histogram-plot, #urbanrural-chart {
+    width: 100%;
+    height: 350px;
+}
+
+.legend-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* Map controls */
+#map-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.map-control-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* County details panel */
+.county-details-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90vw;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+}
+
+.county-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.county-header h2 {
+    font-size: 1.4rem;
+    color: #4682B4;
+}
+
+#close-details {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #777;
+    cursor: pointer;
+}
+
+#close-details:hover {
+    color: #333;
+}
+
+.county-content {
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.county-section {
+    margin-bottom: 1.5rem;
+}
+
+.county-section h3 {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.county-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.county-section td {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.county-section td:first-child {
+    font-weight: 600;
+    width: 60%;
+}
+
+.county-section td:last-child {
+    text-align: right;
+    color: #4682B4;
+}
+
+/* Footer */
+footer {
+    background-color: #f0f2f5;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    color: #777;
+    font-size: 0.85rem;
+}
+
+/* D3 Visualization Styles */
+.axis path,
+.axis line {
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 11px;
+    fill: #666;
+}
+
+.dot {
+    stroke: #fff;
+    stroke-width: 0.5;
+    opacity: 0.8;
+}
+
+.dot:hover {
+    stroke: #333;
+    stroke-width: 1;
+}
+
+.dot.selected {
+    stroke: #333;
+    stroke-width: 2;
+    opacity: 1;
+}
+
+.bar rect {
+    fill: #4682B4;
+    shape-rendering: crispEdges;
+}
+
+.bar rect:hover {
+    fill: #3A6A8E;
+}
+
+.county {
+    stroke: #fff;
+    stroke-width: 0.3;
+}
+
+.county:hover {
+    stroke: #333;
+    stroke-width: 1;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.tooltip-value {
+    color: #4682B4;
+    font-weight: 600;
+}
+
+/* Ensure visualizations don't overflow on smaller screens */
+@media screen and (max-width: 1200px) {
+    .dashboard-row {
+        flex-direction: column;
+    }
+}

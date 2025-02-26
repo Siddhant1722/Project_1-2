@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Socioeconomic Factors Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- TopoJSON library for map visualization -->
+    <script src="https://unpkg.com/topojson@3"></script>
+    <!-- D3-legend for better legend creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Health & Socioeconomic Factors in US Counties</h1>
+        <p>Exploring relationships between economic indicators and health outcomes across the United States</p>
+    </header>
+
+    <div class="controls-container">
+        <div class="control-group">
+            <label for="socioeconomic-select">Socioeconomic Metric:</label>
+            <select id="socioeconomic-select">
+                <option value="median_household_income">Median Household Income</option>
+                <option value="poverty_perc">Poverty Percentage</option>
+                <option value="education_less_than_high_school_percent">Less than High School Education %</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="health-select">Health Outcome:</label>
+            <select id="health-select">
+                <option value="percent_stroke">Stroke %</option>
+                <option value="percent_high_blood_pressure">High Blood Pressure %</option>
+                <option value="percent_coronary_heart_disease">Coronary Heart Disease %</option>
+                <option value="percent_high_cholesterol">High Cholesterol %</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="urban-filter">Area Type:</label>
+            <select id="urban-filter">
+                <option value="all">All Counties</option>
+                <option value="Rural">Rural</option>
+                <option value="Small City">Small City</option>
+                <option value="Suburban">Suburban</option>
+                <option value="Urban">Urban</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <button id="reset-button">Reset Selection</button>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card" id="correlation-card">
+            <h3>Correlation</h3>
+            <div class="stat-value" id="correlation-value">-</div>
+            <p class="stat-description" id="correlation-description">Between selected metrics</p>
+        </div>
+
+        <div class="stat-card" id="counties-card">
+            <h3>Counties</h3>
+            <div class="stat-value" id="counties-count">-</div>
+            <p class="stat-description" id="counties-description">Counties with valid data</p>
+        </div>
+
+        <div class="stat-card" id="selection-card">
+            <h3>Selected County</h3>
+            <div class="stat-value" id="selected-county">None</div>
+            <p class="stat-description" id="selected-description">Click a point on the scatter plot</p>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-row">
+            <!-- Scatter Plot -->
+            <div class="dashboard-card" id="scatter-container">
+                <h2>Relationship Between Economic & Health Factors</h2>
+                <div id="scatter-plot"></div>
+                <div class="legend-container" id="scatter-legend"></div>
+            </div>
+            
+            <!-- Choropleth Map -->
+            <div class="dashboard-card" id="map-container">
+                <h2>Geographic Distribution</h2>
+                <div id="map-controls">
+                    <div class="map-control-item">
+                        <input type="radio" id="map-health" name="map-data" value="health" checked>
+                        <label for="map-health">Health Outcome</label>
+                    </div>
+                    <div class="map-control-item">
+                        <input type="radio" id="map-socioeconomic" name="map-data" value="socioeconomic">
+                        <label for="map-socioeconomic">Socioeconomic Factor</label>
+                    </div>
+                </div>
+                <div id="choropleth-map"></div>
+                <div class="legend-container" id="map-legend"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-row">
+            <!-- Distribution Histogram -->
+            <div class="dashboard-card" id="histogram-container">
+                <h2>Distribution of <span id="histogram-title">Health Outcome</span></h2>
+                <div id="histogram-plot"></div>
+            </div>
+            
+            <!-- Urban/Rural Comparison -->
+            <div class="dashboard-card" id="urbanrural-container">
+                <h2>Urban vs. Rural Comparison</h2>
+                <div id="urbanrural-chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="county-details-container" id="county-details">
+        <div class="county-header">
+            <h2 id="details-county-name">County Details</h2>
+            <button id="close-details">&times;</button>
+        </div>
+        <div class="county-content">
+            <div class="county-section">
+                <h3>Socioeconomic Factors</h3>
+                <table>
+                    <tr>
+                        <td>Median Household Income:</td>
+                        <td id="details-income">-</td>
+                    </tr>
+                    <tr>
+                        <td>Poverty Percentage:</td>
+                        <td id="details-poverty">-</td>
+                    </tr>
+                    <tr>
+                        <td>Less than High School Education:</td>
+                        <td id="details-education">-</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="county-section">
+                <h3>Health Outcomes</h3>
+                <table>
+                    <tr>
+                        <td>Stroke:</td>
+                        <td id="details-stroke">-</td>
+                    </tr>
+                    <tr>
+                        <td>High Blood Pressure:</td>
+                        <td id="details-bp">-</td>
+                    </tr>
+                    <tr>
+                        <td>Coronary Heart Disease:</td>
+                        <td id="details-chd">-</td>
+                    </tr>
+                    <tr>
+                        <td>High Cholesterol:</td>
+                        <td id="details-cholesterol">-</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="county-section">
+                <h3>Additional Factors</h3>
+                <table>
+                    <tr>
+                        <td>Area Classification:</td>
+                        <td id="details-urban">-</td>
+                    </tr>
+                    <tr>
+                        <td>Elderly Population:</td>
+                        <td id="details-elderly">-</td>
+                    </tr>
+                    <tr>
+                        <td>Physically Inactive:</td>
+                        <td id="details-inactive">-</td>
+                    </tr>
+                    <tr>
+                        <td>Smoking:</td>
+                        <td id="details-smoking">-</td>
+                    </tr>
+                    <tr>
+                        <td>No Health Insurance:</td>
+                        <td id="details-insurance">-</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Data Source: US Heart and Stroke Atlas (CDC) - 2024</p>
+        <p>Created with D3.js, HTML, CSS, and JavaScript</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
